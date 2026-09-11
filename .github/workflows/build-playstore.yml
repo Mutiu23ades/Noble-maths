@@ -12,15 +12,15 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set up Java
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '17'
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
-          node-version: '20'
+          node-version: '24'
 
       - name: Create package.json
         run: |
@@ -29,9 +29,6 @@ jobs:
             "name": "sss1-mathematics-app",
             "version": "1.0.0",
             "private": true,
-            "scripts": {
-              "build": "echo Building SSS 1 Mathematics App"
-            },
             "dependencies": {
               "@capacitor/core": "^7.4.3",
               "@capacitor/android": "^7.4.3",
@@ -59,13 +56,13 @@ jobs:
       - name: Sync web app
         run: npx cap sync android
 
-      - name: Build Android App Bundle
+      - name: Build Play Store AAB
         working-directory: android
         run: |
           chmod +x gradlew
           ./gradlew bundleDebug
 
-      - name: Upload AAB
+      - name: Upload Play Store AAB
         uses: actions/upload-artifact@v4
         with:
           name: SSS-1-Mathematics-PlayStore-AAB
