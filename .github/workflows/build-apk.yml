@@ -20,13 +20,15 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
-
-      - name: Install Android SDK 36
+      - name: Accept Android SDK licenses
         run: |
-          yes | sdkmanager --licenses || true
-          sdkmanager "platforms;android-36" "build-tools;35.0.0"
+          yes | sdkmanager --licenses > /dev/null || true
+
+      - name: Install Android SDK packages
+        run: |
+          sdkmanager "platform-tools"
+          sdkmanager "platforms;android-36"
+          sdkmanager "build-tools;35.0.0"
 
       - name: Install Gradle
         uses: gradle/actions/setup-gradle@v4
@@ -43,7 +45,6 @@ jobs:
       - name: Create Android project
         run: |
           mkdir -p android/app/src/main/java/com/sss1mathematics/app
-          mkdir -p android/app/src/main/res/layout
           mkdir -p android/app/src/main/res/values
           mkdir -p android/app/src/main/assets
 
@@ -123,7 +124,6 @@ jobs:
                   android:supportsRtl="true"
                   android:theme="@style/AppTheme">
 
-                  <!-- AdMob App ID -->
                   <meta-data
                       android:name="com.google.android.gms.ads.APPLICATION_ID"
                       android:value="ca-app-pub-4792413607142824~6064767274" />
@@ -219,8 +219,6 @@ jobs:
                   adView = new AdView(this);
                   adView.setAdSize(AdSize.BANNER);
 
-                  // Google official test Banner ID.
-                  // DO NOT use the real AdMob ad unit while testing.
                   adView.setAdUnitId(
                           "ca-app-pub-3940256099942544/9214589741"
                   );
@@ -235,11 +233,11 @@ jobs:
 
                   setContentView(mainLayout);
 
-                  webView.loadUrl(
-                          "file:///android_asset/index.html"
-                  );
+                  webView.loadUrl("file:///android_asset/index.html");
 
-                  AdRequest adRequest = new AdRequest.Builder().build();
+                  AdRequest adRequest =
+                          new AdRequest.Builder().build();
+
                   adView.loadAd(adRequest);
               }
 
